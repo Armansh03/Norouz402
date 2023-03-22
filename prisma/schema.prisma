@@ -1,0 +1,54 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url  = "file:./dev.db"
+}
+
+model User {
+    id                String  @id  
+    fname             String
+    lname             String  
+    avatar_url        String  @unique
+    registration_date DateTime
+    phone             String
+    birthday          DateTime
+    password          String
+    wallet            Int
+    orders            Order[]
+}
+
+model Ticket {
+    id              String  @id 
+    from_location   String
+    to_location     String
+    arrival_date    DateTime
+    departure_date  DateTime
+    unit_price      Float
+    count           Int
+
+    orders          Order[]//Each ticket can be in multiple orders(but only one of them can be paid)
+}
+
+model Order{
+    id                  String  @id 
+    ticket_id           String
+    user_id             String
+    count               Int
+    total_price         Float
+    // status              Status @default(neither)
+    registration_date   DateTime
+
+
+    User                User     @relation(fields: [user_id], references: [id])
+    Ticket              Ticket   @relation(fields: [ticket_id], references: [id])
+}
+
+// enum Status{
+//     paid
+//     canceled
+//     reserved
+//     neither
+// }
