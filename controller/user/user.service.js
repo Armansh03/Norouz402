@@ -6,7 +6,10 @@ function updatePermittedKeys(data){
     const PermittedKeys = ["fname", "lname", "avatar_url", "registration_date", "phone", "birthday", "password"]
     for (const key of PermittedKeys) {
         if (data.hasOwnProperty(key)){
-            result[key] = data[key];
+            if (key == "birthday" || key == "registration_date")
+                result[key] = new Date(data[key]);
+            else
+                result[key] = data[key];
         }
     }
     return result;

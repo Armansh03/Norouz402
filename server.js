@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
-const {userRouter} = require("./routes")
-
+const {userRouter, ticketRouter} = require("./routes")
 
 app.use(express.json())
 
@@ -13,7 +12,7 @@ app.get("/", (req, res) => {
 ///////////////////////////////////////User
 
 app.use("/api/v1/user", userRouter)
-
+app.use("/api/v1/ticket", ticketRouter)
 
 /////////////////////////////////////////////////
 
