@@ -1,0 +1,1 @@
+exports.userMiddleware = require("./user.middleware");

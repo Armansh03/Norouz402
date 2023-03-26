@@ -1,42 +1,5 @@
 const db = require("../../db")
-
-
-function updatePermittedKeys(data){
-    const result = {};
-    const PermittedKeys = ["fname", "lname", "avatar_url", "registration_date", "phone", "birthday", "password"]
-    for (const key of PermittedKeys) {
-        if (data.hasOwnProperty(key)){
-            if (key == "birthday" || key == "registration_date")
-                result[key] = new Date(data[key]);
-            else
-                result[key] = data[key];
-        }
-    }
-    return result;
-}
-
-function createPermittedData(data) {
-    const result = {};
-    let flag = 0;
-    let notGiven = [];
-    const PermittedKeys = ["id", "fname", "lname", "avatar_url", "registration_date", "phone", "birthday", "password"]
-    for (const key of PermittedKeys) {
-        if (data.hasOwnProperty(key)){
-            if (key == "birthday" || key == "registration_date")
-                result[key] = new Date(data[key]);
-            else
-                result[key] = data[key];
-        }
-        else{
-            flag = 1
-            notGiven.push(key);
-        }
-    }
-    if (flag){
-        throw new Error(`All data should be sent. ${notGiven} not given`);
-    }
-    return result;
-}
+const {userMiddleware} = require("../../middlewares")
 
 exports.userService = {
     getByID: async(id) => {
@@ -58,6 +21,18 @@ exports.userService = {
         }
         
     },
+    getByAvatar : async(avatar) =>{
+        try {
+            console.log(avatar);
+            const user = await db.user.findUnique({
+                where : {avatar_url : avatar},
+            })
+            return user;        
+        } catch (error) {
+            throw new Error(error.message);
+        }
+
+    },
     list : async () => {
         try {
             return await db.user.findMany({
@@ -71,10 +46,10 @@ exports.userService = {
         }
         
     },
-    create : async(req) => {
+    create : async(reqBody) => {
         try {
             await db.user.create({
-                data: createPermittedData(req.body)
+                data: userMiddleware.createPermittedData(req.body)
             })
             return "User created";  
 
@@ -100,7 +75,7 @@ exports.userService = {
                     where:{
                         id: id
                     },
-                    data: updatePermittedKeys(req.body),
+                    data: userMiddleware.updatePermittedKeys(req.body)
                 })
                 return "User updated";
             }            
@@ -129,6 +104,9 @@ exports.userService = {
         } catch (error) {
             throw new Error(error.message);
         }
+
+    },
+    authenticate: async(username, password) => {
 
     }
 }

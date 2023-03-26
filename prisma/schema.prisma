@@ -28,8 +28,6 @@ model Ticket {
     departure_date  DateTime
     unit_price      Float
     count           Int
-
-    orders          Order[]//Each ticket can be in multiple orders(but only one of them can be paid)
 }
 
 model Order{
@@ -43,7 +41,6 @@ model Order{
 
 
     User                User     @relation(fields: [user_id], references: [id])
-    Ticket              Ticket   @relation(fields: [ticket_id], references: [id])
 }
 
 // enum Status{
