@@ -1,9 +1,9 @@
 function updatePermittedKeys(data){
     const result = {};
-    const PermittedKeys = ["fname", "lname", "avatar_url", "registration_date", "phone", "birthday", "password"]
+    const PermittedKeys = ["fname", "lname", "avatar_url", "phone", "birthday", "password"]
     for (const key of PermittedKeys) {
         if (data.hasOwnProperty(key)){
-            if (key == "birthday" || key == "registration_date")
+            if (key == "birthday")
                 result[key] = new Date(data[key]);
             else
                 result[key] = data[key];
@@ -16,10 +16,10 @@ function createPermittedData(data) {
     const result = {};
     let flag = 0;
     let notGiven = [];
-    const PermittedKeys = ["id", "fname", "lname", "avatar_url", "registration_date", "phone", "birthday", "password"]
+    const PermittedKeys = ["id", "fname", "lname", "avatar_url", "phone", "birthday", "password"]
     for (const key of PermittedKeys) {
         if (data.hasOwnProperty(key)){
-            if (key == "birthday" || key == "registration_date")
+            if (key == "birthday")
                 result[key] = new Date(data[key]);
             else
                 result[key] = data[key];
@@ -32,6 +32,7 @@ function createPermittedData(data) {
     if (flag){
         throw new Error(`All data should be sent. ${notGiven} not given`);
     }
+    result["registration_date"] = new Date();
     return result;
 }
 module.exports = {createPermittedData, updatePermittedKeys};

@@ -1,6 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const {userRouter, ticketRouter} = require("./routes")
+
 
 app.use(express.json())
 
@@ -14,7 +16,20 @@ app.get("/", (req, res) => {
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/ticket", ticketRouter)
 
+app.get("/error", (req, res) => {
+    throw new Error("Errorrrrrrr!");
+})
+
+
+app.use((error, req, res, next) => {
+    console.log("ssssss", error.message);
+    res.send(error.messsage);
+})
 /////////////////////////////////////////////////
+
+app.use((req, res) => {
+    res.send("Not Found")
+})
 
 const PORT = process.env.PORT || 3001;
 

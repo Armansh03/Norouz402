@@ -49,7 +49,7 @@ exports.userService = {
     create : async(reqBody) => {
         try {
             await db.user.create({
-                data: userMiddleware.createPermittedData(req.body)
+                data: userMiddleware.createPermittedData(reqBody)
             })
             return "User created";  
 

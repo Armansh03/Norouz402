@@ -2,6 +2,8 @@ const {userService} = require("./user.service")
 const {errorHandler} = require("../../utils");
 const {validationResult} = require("express-validator")
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 
 const userController = {
 
@@ -64,8 +66,10 @@ const userController = {
             }
             const validPass = await bcrypt.compare(password, user.password);
             console.log("PPPPPPPPPP", password, user.password);
-            if (validPass)
-                return res.json("Logged in");
+            if (validPass){
+                const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn : Number(process.env.TOKEN_EXPIRE_TIME)})
+                return res.json(`Logged in, token : ${token}`);
+            }
             else
                 return res.json("Invalid");
         } catch (error) {

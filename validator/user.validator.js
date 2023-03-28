@@ -3,7 +3,6 @@ const db = require("../db")
 
 
 exports.userCreateValidator = [
-    body("registration_date").isISO8601(),
     body("birthday").isISO8601(),
     body("fname").isString(),
     body("lname").isString(),
