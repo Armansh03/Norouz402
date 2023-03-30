@@ -7,9 +7,11 @@ const orderCreateValidator = [
     body("total_price").isFloat()
 ];
 
-function orderPermittedKey(data) {
+function orderPermittedKey(data, update = 0) {
     const result = {};
-    const PermittedKeys = ["id", "ticket_id", "user_id", "count", "total_price", "status"]
+    let PermittedKeys = ["id", "ticket_id", "user_id", "count", "total_price", "status"]
+    if (update)
+        PermittedKeys = ["count", "total_price", "status"]
     for (const key of PermittedKeys) {
         if (data.hasOwnProperty(key)){
             result[key] = data[key];

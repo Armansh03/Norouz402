@@ -23,5 +23,60 @@ exports.orderService = {
         } catch (error) {
             throw new Error(error.message);
         }
+    },
+    modify : async(req) => {
+        try {
+            const {id} = req.params;
+            const order = await db.order.findUnique({
+                where : {id : id}
+            })
+            if (!order)
+                return "Order doesn't exist";
+            await db.order.update({
+                where : {
+                    id : id
+                },
+                data : orderMiddleware.orderPermittedKey(req.body, 1)
+            })
+            return "Updated";
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    cancel : async(id) => {
+        try {
+            const order = await db.order.findUnique({
+                where : {id : id}
+            })
+            if (!order)
+                return "Order doesn't exist"
+            await db.order.update({
+                where : {id : id},
+                data : {
+                    status : "canceled"
+                }
+            })
+            return "Canceled";
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    pay : async(id) => {
+        try {
+            const order = await db.order.findUnique({
+                where : {id : id}
+            })
+            if (!order)
+                return "Order doesn't exist"
+            await db.order.update({
+                where : {id : id},
+                data : {
+                    status : "paid"
+                }
+            })
+            return "Paid";
+        } catch (error) {
+            throw new Error(error.message);
+        }
     }
 }
