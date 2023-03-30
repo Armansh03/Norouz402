@@ -36,16 +36,9 @@ model Order{
     user_id             String
     count               Int
     total_price         Float
-    // status              Status @default(neither)
+    status              String
     registration_date   DateTime
 
 
     User                User     @relation(fields: [user_id], references: [id])
 }
-
-// enum Status{
-//     paid
-//     canceled
-//     reserved
-//     neither
-// }

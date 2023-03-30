@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const {userRouter, ticketRouter} = require("./routes")
+const {userRouter, ticketRouter, orderRouter} = require("./routes")
 
 
 app.use(express.json())
@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/ticket", ticketRouter)
+app.use("/api/v1/order", orderRouter)
 
 app.get("/error", (req, res) => {
     throw new Error("Errorrrrrrr!");

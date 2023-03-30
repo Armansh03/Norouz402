@@ -1,5 +1,6 @@
 const { errorHandler } = require("../../utils");
 const {ticketService} = require("./ticket.service");
+const {validationResult} = require("express-validator")
 
 const ticketController = {
     list : async (req, res) => {
@@ -41,6 +42,10 @@ const ticketController = {
     },
     create : async(req, res) => {
         try {
+            const validationError = validationResult(req).errors;
+            if (validationError.length){
+                return errorHandler(res, validationError, 400);
+            }
             const ticketAdd = await ticketService.create(req);
             return res.json(ticketAdd)            
         } catch (error) {
